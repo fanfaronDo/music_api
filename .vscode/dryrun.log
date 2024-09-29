@@ -1,0 +1,5 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: Entering directory `/c/Users/admin/Desktop/projects_go/music_api'
+go run ./cmd/app/main.go
+make.exe: Leaving directory `/c/Users/admin/Desktop/projects_go/music_api'
+ 
