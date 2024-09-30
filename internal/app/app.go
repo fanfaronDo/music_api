@@ -9,8 +9,8 @@ import (
 
 func Run(cnf *config.Config) error {
 	ctx := context.Background()
+	db, err := storage.NewPostgres(ctx, cnf.Postgres.Host, cnf)
 
-	db, err := storage.NewPostgres(ctx, cnf.Address, cnf)
 	if err != nil {
 		return err
 	}

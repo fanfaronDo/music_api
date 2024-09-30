@@ -5,15 +5,18 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/fanfaronDo/music_api/pkg/config"
+	_ "github.com/lib/pq"
 	"strconv"
 	"time"
 )
+
+const PostgresTimeCheck = time.Second * 5
 
 func NewPostgres(ctx context.Context, host string, cfg *config.Config) (*sql.DB, error) {
 	if cfg == nil {
 		return nil, ErrConfigNull
 	}
-	ctx, cancel := context.WithTimeout(ctx, time.Second*2)
+	ctx, cancel := context.WithTimeout(ctx, PostgresTimeCheck)
 	defer func() {
 		fmt.Println("Canceled with context.Context")
 		cancel()
@@ -34,7 +37,7 @@ func NewPostgres(ctx context.Context, host string, cfg *config.Config) (*sql.DB,
 		return nil, err
 	}
 
-	if err = db.Ping(); err != nil {
+	if err = db.PingContext(ctx); err != nil {
 		return nil, err
 	}
 
