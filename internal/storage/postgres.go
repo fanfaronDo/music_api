@@ -1,18 +1,23 @@
 package storage
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"github.com/fanfaronDo/music_api/pkg/config"
 	"strconv"
+	"time"
 )
 
-type Postgres struct{}
-
-func (pg *Postgres) Connect(host string, cfg *config.Config) (*sql.DB, error) {
+func NewPostgres(ctx context.Context, host string, cfg *config.Config) (*sql.DB, error) {
 	if cfg == nil {
 		return nil, ErrConfigNull
 	}
+	ctx, cancel := context.WithTimeout(ctx, time.Second*2)
+	defer func() {
+		fmt.Println("Canceled with context.Context")
+		cancel()
+	}()
 
 	portINT, err := strconv.Atoi(cfg.Postgres.Port)
 	if err != nil {

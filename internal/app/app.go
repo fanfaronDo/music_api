@@ -1,15 +1,21 @@
 package app
 
 import (
-	"database/sql"
+	"context"
+	"fmt"
+	"github.com/fanfaronDo/music_api/internal/storage"
 	"github.com/fanfaronDo/music_api/pkg/config"
 )
 
-type DataBase interface {
-	Connect(host string, cfg *config.Config) (*sql.DB, error)
-}
-
 func Run(cnf *config.Config) error {
+	ctx := context.Background()
+
+	db, err := storage.NewPostgres(ctx, cnf.Address, cnf)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(db)
 
 	return nil
 }
